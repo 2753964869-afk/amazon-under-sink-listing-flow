@@ -1,4 +1,4 @@
 interface:
   display_name: "Amazon Under-Sink Listing Flow"
-  short_description: "No-login under-sink reviews, Excel, listing, and report"
-  default_prompt: "Use $amazon-under-sink-listing-flow without an Amazon login to analyze under-sink organizer ASIN reviews, export Chinese review workbooks, create Amazon US listing copy, and generate a Chinese HTML report."
+  short_description: "No-key under-sink reviews, Excel, listing, and report"
+  default_prompt: "Use $amazon-under-sink-listing-flow without an Amazon login or API key to collect Amazon US written reviews, analyze under-sink organizer ASINs, export Chinese review workbooks, create Amazon US listing copy, and generate a Chinese HTML report. Use BrowserAct or SellerSprite only when I have configured and requested them."

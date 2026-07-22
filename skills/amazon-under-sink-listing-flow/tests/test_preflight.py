@@ -33,7 +33,7 @@ class PreflightTests(unittest.TestCase):
         self.assertNotIn("secret", str(result))
         self.assertEqual("optional", self.check(result, "browser-act CLI")["status"])
 
-    def test_missing_key_fails_without_exposing_secret(self):
+    def test_missing_browseract_key_keeps_free_asin_collection_available(self):
         preflight = load_preflight()
         with tempfile.TemporaryDirectory() as temp_dir:
             result = preflight.run_checks(
@@ -44,8 +44,8 @@ class PreflightTests(unittest.TestCase):
                 workdir=Path(temp_dir),
             )
 
-        self.assertFalse(result["ok"])
-        self.assertEqual("fail", self.check(result, "BROWSERACT_API_KEY")["status"])
+        self.assertTrue(result["ok"])
+        self.assertEqual("optional", self.check(result, "BROWSERACT_API_KEY")["status"])
 
     def test_discovery_mode_requires_browser_cli(self):
         preflight = load_preflight()

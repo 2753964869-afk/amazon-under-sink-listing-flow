@@ -3,9 +3,7 @@
 ## Core ASIN Mode
 
 - Python 3.9 or newer.
-- Network access to `https://api.browseract.com` for live review extraction.
-- `BROWSERACT_API_KEY` set in the current process environment.
-- Access to BrowserAct workflow template `77817507798321724`, or another template supplied through `--template-id`.
+- Network access to the bundled public Amazon US written-review source.
 
 No Amazon account, Amazon login, Node.js runtime, Microsoft Excel installation, pip package, or separately installed workflow skill is required.
 
@@ -26,6 +24,12 @@ python <skill>/scripts/preflight.py --mode discovery --workdir ./work
 ```
 
 If anonymous discovery is unavailable, continue with user-provided ASINs or the documented exact baseline.
+
+## Optional Providers
+
+- BrowserAct requires `BROWSERACT_API_KEY` and access to workflow template `77817507798321724`, or another template supplied through `--template-id`.
+- SellerSprite requires the relevant `sellersprite-*` skill, a connected WebBridge, and a SellerSprite login in that browser profile.
+- Missing optional-provider configuration must not fail core ASIN preflight or block conservative listing generation.
 
 ## Offline Installation Check
 

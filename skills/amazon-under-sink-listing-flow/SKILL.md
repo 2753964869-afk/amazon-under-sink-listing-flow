@@ -9,9 +9,10 @@ description: "Use when researching Amazon US under-sink pull-out organizers, ana
 
 Run the complete workflow without an Amazon account. Do not require an Amazon login.
 
-No other skill is required for ASIN-based review analysis, Excel export, listing generation, or HTML reporting. Python 3.9+ and the bundled scripts are sufficient. `BROWSERACT_API_KEY` is required only for live review extraction. The `browser-act` CLI is required only when the user asks the agent to discover current competitors from rendered Amazon search results.
+No other skill is required for ASIN-based review analysis, Excel export, listing generation, or HTML reporting. Python 3.9+ and the bundled scripts are sufficient. Use `collect_amazon_reviews.py` as the default Amazon US written-review source; it needs no Amazon login, API key, or browser software. `BROWSERACT_API_KEY` is optional for BrowserAct enhancement or fallback. The `browser-act` CLI is required only when the user asks the agent to discover current competitors from rendered Amazon search results.
 
 Read `references/runtime-requirements.md` when installing, diagnosing, or validating the runtime.
+Read `references/data-source-routing.md` before selecting or combining live data sources.
 
 ## Workflow
 
@@ -36,8 +37,9 @@ Use `--offline` during installation tests. Never print or persist the value of `
 Choose the first applicable source:
 
 1. Use ASINs supplied by the user.
-2. Reuse the exact baseline only when the user asks to rerun the prior benchmark.
-3. Otherwise use an anonymous rendered Amazon search page and extract non-empty `[data-asin]` values.
+2. When the user has configured SellerSprite, use `sellersprite-competitors` or `sellersprite-products` for current competitor candidates.
+3. Reuse the exact baseline only when the user asks to rerun the prior benchmark.
+4. Otherwise use an anonymous rendered Amazon search page and extract non-empty `[data-asin]` values.
 
 Anonymous discovery URL:
 
@@ -59,7 +61,15 @@ Treat prices, ratings, review counts, rankings, and variants as time-sensitive. 
 
 ### 3. Extract Reviews
 
-Set `BROWSERACT_API_KEY` only in the current environment, then run the portable standard-library client for each ASIN:
+Collect Amazon US written reviews without configuration:
+
+```powershell
+python <skill>/scripts/collect_amazon_reviews.py --marketplace US --asins B0B3JJYJSS B0DNTQ2YNT --total-limit 30 --output ./work/reviews/free_reviews.json
+```
+
+The collector returns its actual unique written-review count when the public endpoint cannot supply the requested total. It never pads, duplicates, or invents reviews. Read `references/runtime-requirements.md` for the public-endpoint limitation and optional provider routing.
+
+When the user has configured BrowserAct and explicitly requests the enhancement or fallback, run the portable client for each ASIN:
 
 ```powershell
 python <skill>/scripts/run_browseract_reviews.py B0B3JJYJSS --output ./work/reviews/DEKAVA_B0B3JJYJSS.txt
@@ -123,6 +133,7 @@ Produce English ready-to-use copy:
 Use only product facts supplied or confirmed by the user. Do not convert competitor features or review complaints into claims about the user's product. If specifications are missing, include a separate assumption block and keep the listing copy conservative; never claim load capacity, material grade, rust resistance, BPA status, dimensions, pack quantity, warranty, or included accessories without evidence.
 
 Do not invent keyword search volumes. When no measured keyword dataset is available, label priorities as qualitative and calculate coverage only against the explicit keyword set used in the report.
+When the user has configured SellerSprite, use `sellersprite-keywords` and `sellersprite-aba` for measured keyword and ABA signals. Skip these enrichments without blocking listing generation when the session, connector, or subscription access is unavailable.
 
 ### 8. Build The HTML Report
 

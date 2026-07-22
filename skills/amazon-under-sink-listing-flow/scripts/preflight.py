@@ -48,8 +48,8 @@ def run_checks(
     else:
         checks.append(check(
             "BROWSERACT_API_KEY",
-            "pass" if has_key else "fail",
-            "Configured" if has_key else "Set BROWSERACT_API_KEY in the current environment",
+            "pass" if has_key else "optional",
+            "Configured for BrowserAct enhancement" if has_key else "Optional; free Amazon US written-review collector is available",
         ))
 
     browser_path = which_fn("browser-act")

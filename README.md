@@ -2,27 +2,29 @@
 
 A self-contained agent skill for Amazon US under-sink pull-out organizer competitor reviews, Chinese Excel workbooks, listing copy, and standalone Chinese HTML reports.
 
-The standard workflow does not require an Amazon account or Amazon login. Live review extraction requires a BrowserAct API key. Anonymous current-competitor discovery additionally requires the `browser-act` CLI.
+The standard Amazon US written-review workflow does not require an Amazon account, API key, or browser software. The bundled free public-source collector is the default. BrowserAct and SellerSprite are optional configured enhancements.
 
 ## Agent Installation Prompt
 
 Give the local agent the GitHub repository URL and this instruction:
 
 ```text
-Install the skill at skills/amazon-under-sink-listing-flow using your skill installer. Do not require an Amazon login. Run its offline preflight and unit tests after installation. Install the browser-act CLI only if I need anonymous current-competitor discovery. Stop when BROWSERACT_API_KEY configuration or another user authorization is required.
+Install the skill at skills/amazon-under-sink-listing-flow using your skill installer. Do not require an Amazon login or API key for the default Amazon US written-review workflow. Run its offline preflight and unit tests after installation. Configure BrowserAct or SellerSprite only when I explicitly request those optional enhancements.
 ```
 
 Codex agents should use the built-in `skill-installer` flow for a GitHub repository path. The skill becomes available on the next agent turn after installation.
 
 ## Runtime Configuration
 
-For ASIN-based review analysis, configure only:
+No provider configuration is required for default Amazon US written-review analysis.
+
+To enable optional BrowserAct enhancement, configure:
 
 ```text
 BROWSERACT_API_KEY
 ```
 
-The key must be provided through the current process environment and must not be committed or written to reports.
+The key must be provided through the current process environment and must not be committed or written to reports. SellerSprite enrichment requires its separately configured local skills, WebBridge session, and browser login.
 
 Run offline verification:
 
@@ -45,7 +47,9 @@ python skills/amazon-under-sink-listing-flow/scripts/preflight.py --mode discove
 
 ## Included Components
 
-- Bounded BrowserAct review workflow client using only the Python standard library.
+- Bounded, no-key Amazon US written-review collector using only the Python standard library.
+- Optional BrowserAct review workflow client.
+- Optional SellerSprite competitor and keyword routing.
 - Strict review JSON normalization and portable XLSX generation.
 - Escaped standalone HTML report generation without Node.js.
 - Offline and live runtime preflight.
