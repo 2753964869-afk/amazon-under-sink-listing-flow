@@ -1,0 +1,4 @@
+interface:
+  display_name: "Amazon Under-Sink Listing Flow"
+  short_description: "No-login under-sink reviews, Excel, listing, and report"
+  default_prompt: "Use $amazon-under-sink-listing-flow without an Amazon login to analyze under-sink organizer ASIN reviews, export Chinese review workbooks, create Amazon US listing copy, and generate a Chinese HTML report."
