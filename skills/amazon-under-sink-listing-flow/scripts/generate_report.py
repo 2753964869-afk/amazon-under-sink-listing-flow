@@ -29,6 +29,17 @@ def render_metric(item) -> str:
     )
 
 
+def render_basis(section) -> str:
+    basis = section.get("basis")
+    if not basis:
+        return ""
+    if isinstance(basis, list):
+        body = "<ul>" + "".join(f"<li>{escape(item)}</li>" for item in basis) + "</ul>"
+    else:
+        body = f'<p class="prewrap">{escape(basis)}</p>'
+    return f'<div class="basis"><div class="basis-title">判断依据</div>{body}</div>'
+
+
 def render_section(section) -> str:
     if not isinstance(section, dict):
         section = {}
@@ -66,7 +77,7 @@ def render_section(section) -> str:
         body = '<div class="metrics">' + "".join(render_metric(item) for item in items) + "</div>"
     else:
         body = f'<p class="prewrap">{escape(section.get("content"))}</p>'
-    return f"<section><h2>{title}</h2>{body}</section>"
+    return f"<section><h2>{title}</h2>{body}{render_basis(section)}</section>"
 
 
 def render_html(report: dict) -> str:
@@ -111,6 +122,7 @@ header{{padding:26px 32px;background:#16324f;color:#fff}}h1{{margin:0 0 8px;font
 th{{background:#f1f5f9;color:#334155;position:sticky;top:0}}.table-wrap{{max-height:560px;overflow:auto;border:1px solid #edf1f6;border-radius:6px}}
 .bar-row{{display:grid;grid-template-columns:minmax(140px,32%) 1fr auto;gap:10px;align-items:center;margin:10px 0}}.bar-track{{height:12px;border-radius:999px;background:#e2e8f0;overflow:hidden}}
 .bar-fill{{height:100%;background:#0f766e}}.bar-value{{min-width:48px;text-align:right;font-weight:700;font-size:13px}}.notes{{color:#475569;font-size:13px}}
+.basis{{margin-top:14px;padding:12px 14px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;color:#334155;font-size:13px}}.basis-title{{margin-bottom:6px;color:#0f172a;font-weight:700}}
 @media(max-width:760px){{header{{padding:20px}}main{{padding:14px}}.bar-row{{grid-template-columns:1fr;gap:4px}}.bar-value{{text-align:left}}}}
 </style></head><body><header><h1>{escape(title)}</h1>{f'<div class="subtitle">{escape(subtitle)}</div>' if subtitle else ''}<div class="meta">{meta}</div></header>
 <main>{summary_html}{''.join(render_section(section) for section in sections)}{notes_html}</main></body></html>'''

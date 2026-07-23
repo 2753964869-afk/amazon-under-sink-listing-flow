@@ -16,6 +16,8 @@ Metric items use `label`, `value`, and optional `hint`.
 
 ## Section Types
 
+Every section may include optional `basis`: either a short plain-language string or a string array. Use it to explain why the section summary was made, in simple Chinese for internal employees. Tie it to visible inputs such as review counts, repeated review phrases, ratings, keyword coverage, ASIN comparisons, product facts, or stated assumptions. Do not use professional jargon, and do not invent evidence.
+
 - `text`: `title`, `type`, `content`. Newlines are preserved.
 - `insights`: `title`, `type`, `items` string array.
 - `table`: `title`, `type`, `columns`, `rows`. Only the first 200 rows are rendered.

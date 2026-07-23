@@ -145,6 +145,8 @@ python <skill>/scripts/generate_report.py --input ./work/under_sink_report.json 
 
 The report should contain Chinese analysis and English listing copy. Include data source, ASINs, sample counts, generation time, evidence limitations, competitor comparison, listing copy, keyword coverage, and image recommendations.
 
+For every major summary module, add a plain-Chinese `basis` field so internal employees can see why the conclusion was made. Explain the basis using everyday wording, not specialist terminology. Point to the visible facts behind the judgment: actual review sample counts, repeated customer phrases, rating patterns, ASIN differences, keyword coverage, product facts supplied by the user, and any assumptions. If evidence is thin, say that the conclusion is only a tendency and avoid absolute wording.
+
 ## Output Checklist
 
 Before final response, verify:
@@ -155,6 +157,7 @@ Before final response, verify:
 - Manifest translations match review counts and source order.
 - Excel is a non-empty valid XLSX ZIP with all required sheets.
 - HTML is non-empty, standalone, and contains the listing copy.
+- HTML shows plain-Chinese judgment basis for each major summary module.
 - Listing claims are supported or clearly separated as assumptions.
 - No API key, cookie, authorization header, absolute local source path, or Amazon credential appears in outputs.
 - Final response links the HTML and Excel deliverables and summarizes two to five evidence-backed conclusions.

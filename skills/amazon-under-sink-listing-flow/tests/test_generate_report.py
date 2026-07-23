@@ -64,6 +64,24 @@ class ReportRendererTests(unittest.TestCase):
         self.assertIn("bar-19", html)
         self.assertNotIn("bar-20", html)
 
+    def test_renders_plain_language_basis_for_sections(self):
+        renderer = load_renderer()
+        html = renderer.render_html({
+            "title": "Basis",
+            "sections": [
+                {
+                    "title": "核心发现",
+                    "type": "insights",
+                    "items": ["安装反馈较多"],
+                    "basis": ["依据 18 条评论样本。", "用户多次提到 easy to install <fast>。"],
+                }
+            ],
+        })
+
+        self.assertIn("判断依据", html)
+        self.assertIn("依据 18 条评论样本。", html)
+        self.assertIn("easy to install &lt;fast&gt;", html)
+
     def test_generates_standalone_utf8_file(self):
         renderer = load_renderer()
         with tempfile.TemporaryDirectory() as temp_dir:
