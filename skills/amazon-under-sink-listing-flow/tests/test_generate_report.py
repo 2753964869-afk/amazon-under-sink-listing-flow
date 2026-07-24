@@ -82,6 +82,49 @@ class ReportRendererTests(unittest.TestCase):
         self.assertIn("依据 18 条评论样本。", html)
         self.assertIn("easy to install &lt;fast&gt;", html)
 
+    def test_renders_recommended_qa_sections(self):
+        renderer = load_renderer()
+        html = renderer.render_html({
+            "title": "QA",
+            "sections": [
+                {
+                    "title": "推荐 QA",
+                    "type": "qa",
+                    "items": [
+                        {
+                            "question": "Will it fit under a sink with pipes?",
+                            "answer": "Measure your cabinet and pipe space first.",
+                            "basis": "Competitor reviews often mention pipe clearance.",
+                            "keywords": ["under sink organizer", "pull out drawer"],
+                            "scenario": "Kitchen and bathroom cabinets",
+                            "priority": "Medium <check>",
+                        }
+                    ],
+                }
+            ],
+        })
+
+        self.assertIn("Will it fit under a sink with pipes?", html)
+        self.assertIn("Measure your cabinet and pipe space first.", html)
+        self.assertIn("under sink organizer, pull out drawer", html)
+        self.assertIn("Medium &lt;check&gt;", html)
+
+    def test_limits_qa_items(self):
+        renderer = load_renderer()
+        html = renderer.render_html({
+            "title": "QA Limits",
+            "sections": [
+                {
+                    "title": "QA",
+                    "type": "qa",
+                    "items": [{"question": f"q-{index}", "answer": "a"} for index in range(55)],
+                }
+            ],
+        })
+
+        self.assertIn("q-49", html)
+        self.assertNotIn("q-50", html)
+
     def test_generates_standalone_utf8_file(self):
         renderer = load_renderer()
         with tempfile.TemporaryDirectory() as temp_dir:

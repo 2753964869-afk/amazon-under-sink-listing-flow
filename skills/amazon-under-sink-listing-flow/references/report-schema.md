@@ -23,6 +23,9 @@ Every section may include optional `basis`: either a short plain-language string
 - `table`: `title`, `type`, `columns`, `rows`. Only the first 200 rows are rendered.
 - `bars`: `title`, `type`, `items` containing `label`, numeric `value`, and optional `hint`. Only the first 20 items are rendered.
 - `metrics`: `title`, `type`, `items` metric array.
+- `qa`: `title`, `type`, `items` QA object array. Each item uses `question`, `answer`, and optional `basis`, `keywords`, `scenario`, `priority`. Only the first 50 items are rendered.
+
+Use the `qa` section for recommended listing Q&A. Treat it as helpful but not mandatory: include it by default when evidence exists, and omit it when the user asks for a concise report or no QA. Good QA candidates can come from competitor negative-review factors the user's product can truthfully solve, high-intent autocomplete/search questions that match the product, strong related keywords, and clear usage scenarios. Do not make unsupported product promises.
 
 ## Minimal Example
 

@@ -11,6 +11,7 @@ from pathlib import Path
 
 MAX_TABLE_ROWS = 200
 MAX_BAR_ITEMS = 20
+MAX_QA_ITEMS = 50
 
 
 def escape(value) -> str:
@@ -38,6 +39,33 @@ def render_basis(section) -> str:
     else:
         body = f'<p class="prewrap">{escape(basis)}</p>'
     return f'<div class="basis"><div class="basis-title">判断依据</div>{body}</div>'
+
+
+def render_qa_items(section) -> str:
+    items = section.get("items") if isinstance(section.get("items"), list) else []
+    cards = []
+    for item in items[:MAX_QA_ITEMS]:
+        if not isinstance(item, dict):
+            continue
+        question = item.get("question") or item.get("q")
+        answer = item.get("answer") or item.get("a")
+        if not question and not answer:
+            continue
+        meta_parts = []
+        for label, key in (("推荐原因", "basis"), ("关键词", "keywords"), ("场景", "scenario"), ("优先级", "priority")):
+            value = item.get(key)
+            if isinstance(value, list):
+                value = ", ".join(str(part) for part in value if part)
+            if value:
+                meta_parts.append(f'<span><strong>{escape(label)}:</strong> {escape(value)}</span>')
+        meta = f'<div class="qa-meta">{"".join(meta_parts)}</div>' if meta_parts else ""
+        cards.append(
+            '<div class="qa-card">'
+            f'<div class="qa-question"><span>Q</span>{escape(question)}</div>'
+            f'<div class="qa-answer"><span>A</span>{escape(answer)}</div>'
+            f"{meta}</div>"
+        )
+    return '<div class="qa-list">' + "".join(cards) + "</div>"
 
 
 def render_section(section) -> str:
@@ -75,6 +103,8 @@ def render_section(section) -> str:
     elif section_type == "metrics":
         items = section.get("items") if isinstance(section.get("items"), list) else []
         body = '<div class="metrics">' + "".join(render_metric(item) for item in items) + "</div>"
+    elif section_type == "qa":
+        body = render_qa_items(section)
     else:
         body = f'<p class="prewrap">{escape(section.get("content"))}</p>'
     return f"<section><h2>{title}</h2>{body}{render_basis(section)}</section>"
@@ -123,6 +153,7 @@ th{{background:#f1f5f9;color:#334155;position:sticky;top:0}}.table-wrap{{max-hei
 .bar-row{{display:grid;grid-template-columns:minmax(140px,32%) 1fr auto;gap:10px;align-items:center;margin:10px 0}}.bar-track{{height:12px;border-radius:999px;background:#e2e8f0;overflow:hidden}}
 .bar-fill{{height:100%;background:#0f766e}}.bar-value{{min-width:48px;text-align:right;font-weight:700;font-size:13px}}.notes{{color:#475569;font-size:13px}}
 .basis{{margin-top:14px;padding:12px 14px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;color:#334155;font-size:13px}}.basis-title{{margin-bottom:6px;color:#0f172a;font-weight:700}}
+.qa-list{{display:grid;gap:12px}}.qa-card{{padding:13px 14px;border:1px solid #e2e8f0;border-radius:6px;background:#fbfdff}}.qa-question,.qa-answer{{display:grid;grid-template-columns:24px 1fr;gap:8px;line-height:22px}}.qa-question{{font-weight:700;color:#0f172a}}.qa-answer{{margin-top:8px;color:#334155}}.qa-question span,.qa-answer span{{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:#e0f2fe;color:#075985;font-size:12px}}.qa-answer span{{background:#dcfce7;color:#166534}}.qa-meta{{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;color:#64748b;font-size:12px}}.qa-meta span{{padding:4px 7px;border:1px solid #e2e8f0;border-radius:999px;background:#fff}}
 @media(max-width:760px){{header{{padding:20px}}main{{padding:14px}}.bar-row{{grid-template-columns:1fr;gap:4px}}.bar-value{{text-align:left}}}}
 </style></head><body><header><h1>{escape(title)}</h1>{f'<div class="subtitle">{escape(subtitle)}</div>' if subtitle else ''}<div class="meta">{meta}</div></header>
 <main>{summary_html}{''.join(render_section(section) for section in sections)}{notes_html}</main></body></html>'''

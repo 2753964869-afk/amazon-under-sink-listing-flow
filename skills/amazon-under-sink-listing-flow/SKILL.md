@@ -147,6 +147,8 @@ The report should contain Chinese analysis and English listing copy. Include dat
 
 For every major summary module, add a plain-Chinese `basis` field so internal employees can see why the conclusion was made. Explain the basis using everyday wording, not specialist terminology. Point to the visible facts behind the judgment: actual review sample counts, repeated customer phrases, rating patterns, ASIN differences, keyword coverage, product facts supplied by the user, and any assumptions. If evidence is thin, say that the conclusion is only a tendency and avoid absolute wording.
 
+Include a recommended QA module by default when there is enough evidence, unless the user asks for no QA or a concise report. Add it as a `type: "qa"` section. Use these inputs as helpful references, not hard rules: competitor negative-review factors that the user's product can truthfully solve, high-intent autocomplete/search questions that strongly match the product, strong related keywords, and clear usage scenarios. Keep QA answers conservative and factual. Do not claim the user's product perfectly solves a problem unless the user supplied product facts prove it.
+
 ## Output Checklist
 
 Before final response, verify:
@@ -158,6 +160,7 @@ Before final response, verify:
 - Excel is a non-empty valid XLSX ZIP with all required sheets.
 - HTML is non-empty, standalone, and contains the listing copy.
 - HTML shows plain-Chinese judgment basis for each major summary module.
+- Recommended QA is included when evidence supports it, or omitted when the user asks to skip QA.
 - Listing claims are supported or clearly separated as assumptions.
 - No API key, cookie, authorization header, absolute local source path, or Amazon credential appears in outputs.
 - Final response links the HTML and Excel deliverables and summarizes two to five evidence-backed conclusions.
